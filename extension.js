@@ -203,18 +203,17 @@ function convertMarkdownToHtml(filename, type, text) {
   };
 
   if (type !== 'html') {
-    // convert the img src of the html
-    md.renderer.rules.html_block = function (tokens, idx) {
-      var html = tokens[idx].content;
-      var $ = cheerio.load(html);
-      $('img').each(function () {
-        var src = $(this).attr('src');
-        var href = convertImgPath(src, filename);
-        $(this).attr('src', href);
-      });
-      return $.html();
-    };
-  }
+	  md.renderer.rules.html_block = function (tokens, idx) {
+		var html = tokens[idx].content;
+
+		html = html.replace(/<img\s+([^>]*?)src=["']([^"']+)["']([^>]*)>/gi, function (match, before, src, after) {
+		  var href = convertImgPath(src, filename);
+		  return `<img ${before}src="${href}"${after}>`;
+		});
+
+		return html;
+	  };
+	}
 
   // checkbox
   md.use(require('markdown-it-checkbox'));
