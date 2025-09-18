@@ -185,7 +185,6 @@ function convertMarkdownToHtml(filename, type, text) {
     }
 
   // convert the img src of the markdown
-  var cheerio = require('cheerio');
   var defaultRender = md.renderer.rules.image;
   md.renderer.rules.image = function (tokens, idx, options, env, self) {
     var token = tokens[idx];
